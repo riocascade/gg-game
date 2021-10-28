@@ -4385,11 +4385,12 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.SubVar,
 		C3.Behaviors.scrollto.Acts.Shake,
 		C3.Plugins.System.Cnds.Else,
+		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
 		C3.Behaviors.Flash.Cnds.IsFlashing,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
 		C3.Plugins.System.Cnds.ForEach,
 		C3.Plugins.Sprite.Cnds.CompareY,
-		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
+		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.Browser.Acts.ConsoleLog,
 		C3.Plugins.LocalStorage.Acts.SetItem,
@@ -4408,13 +4409,14 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Exps.loopindex,
 		C3.Plugins.Sprite.Exps.UID,
 		C3.Plugins.System.Cnds.CompareBoolVar,
+		C3.Plugins.Sprite.Acts.SetHeight,
 		C3.Plugins.Sprite.Cnds.IsOnScreen,
 		C3.Behaviors.Bullet.Cnds.IsEnabled,
 		C3.Plugins.Sprite.Acts.RotateTowardPosition,
+		C3.Plugins.Sprite.Acts.SetTowardPosition,
 		C3.Behaviors.Pin.Cnds.IsPinned,
 		C3.Plugins.System.Acts.SetFunctionReturnValue,
 		C3.Plugins.Sprite.Cnds.PickDistance,
-		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.TextBox.Acts.SetCSSStyle,
 		C3.Plugins.System.Exps.layoutname,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
@@ -4494,6 +4496,7 @@ self.C3_JsPropNameTable = [
 	{menu: 0},
 	{Lock: 0},
 	{Icon: 0},
+	{isBoss: 0},
 	{Bullet2: 0},
 	{hp: 0},
 	{boss: 0},
@@ -4504,7 +4507,7 @@ self.C3_JsPropNameTable = [
 	{E3: 0},
 	{E4: 0},
 	{E5: 0},
-	{E6: 0},
+	{E_BOSS: 0},
 	{E7: 0},
 	{E8: 0},
 	{E9: 0},
@@ -4548,6 +4551,7 @@ self.C3_JsPropNameTable = [
 	{SpriteFontLastScore: 0},
 	{Shield: 0},
 	{SpriteFontShield: 0},
+	{BossHealthBar: 0},
 	{Enemies: 0},
 	{Patterns: 0},
 	{Bullets: 0},
@@ -4569,6 +4573,7 @@ self.C3_JsPropNameTable = [
 	{asteroidCollisionDmg: 0},
 	{enemyBulletDmg: 0},
 	{enemyCollisionDmg: 0},
+	{BossBulletDmg: 0},
 	{playerDmg: 0},
 	{enemyHealthMultiplier: 0},
 	{playerPower1: 0},
@@ -5136,6 +5141,11 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 8,
 		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			return () => (100 + (v0.GetValue() * (v1.GetValue() - 1)));
+		},
+		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(1, 2, 3);
 		},
@@ -5160,8 +5170,17 @@ self.C3_ExpressionFuncs = [
 			return () => f0(2, 3, 5);
 		},
 		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => ((n0.ExpInstVar() / n1.ExpInstVar()) * 400);
+		},
+		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() / 3);
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() * 2);
 		},
 		p => {
 			const n0 = p._GetNode(0);
