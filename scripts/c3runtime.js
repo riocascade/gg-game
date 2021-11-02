@@ -4359,8 +4359,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetPos,
 		C3.Plugins.Touch.Exps.X,
 		C3.Plugins.Touch.Exps.Y,
-		C3.Plugins.Touch.Cnds.IsInTouch,
-		C3.Behaviors.MoveTo.Acts.MoveToPosition,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Audio.Acts.Play,
 		C3.Plugins.Sprite.Exps.ImagePointX,
@@ -4369,6 +4367,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Exps.Angle,
 		C3.Plugins.Sprite.Acts.SetAnim,
 		C3.Plugins.Sprite.Acts.SetAngle,
+		C3.Plugins.Touch.Cnds.IsInTouch,
+		C3.Behaviors.MoveTo.Acts.MoveToPosition,
 		C3.Plugins.Touch.Cnds.OnTouchEnd,
 		C3.Behaviors.Pin.Acts.Unpin,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
@@ -4395,7 +4395,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Browser.Acts.ConsoleLog,
 		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.Sprite.Cnds.OnAnyAnimFinished,
-		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Behaviors.Flash.Acts.Flash,
 		C3.Plugins.System.Acts.SetLayerBackground,
 		C3.Plugins.System.Exps.rgb,
@@ -4431,7 +4430,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Arr.Exps.AsJSON,
 		C3.Plugins.Dictionary.Exps.AsJSON,
 		C3.Plugins.Dictionary.Acts.JSONLoad,
-		C3.Plugins.Browser.Acts.Close,
+		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.Sprite.Cnds.IsVisible,
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Arr.Cnds.CompareXY,
@@ -4440,7 +4439,11 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Arr.Exps.CurX,
 		C3.Plugins.Arr.Acts.SetXY,
 		C3.Plugins.Text.Exps.Text,
-		C3.Plugins.TextBox.Exps.Text
+		C3.Plugins.Browser.Acts.Close,
+		C3.Plugins.TextBox.Exps.Text,
+		C3.Plugins.Audio.Cnds.IsTagPlaying,
+		C3.Plugins.System.Acts.SetLayerVisible,
+		C3.Plugins.System.Cnds.LayerVisible
 	];
 };
 self.C3_JsPropNameTable = [
@@ -4552,6 +4555,13 @@ self.C3_JsPropNameTable = [
 	{Shield: 0},
 	{SpriteFontShield: 0},
 	{BossHealthBar: 0},
+	{SettingBtn: 0},
+	{DarkOverlay: 0},
+	{Settings: 0},
+	{BgmBar: 0},
+	{SfxBar: 0},
+	{BgmSlider: 0},
+	{SfxSlider: 0},
 	{Enemies: 0},
 	{Patterns: 0},
 	{Bullets: 0},
@@ -4641,6 +4651,8 @@ self.C3_JsPropNameTable = [
 	{cur_score: 0},
 	{insert: 0},
 	{cur_index: 0},
+	{bgmVolume: 0},
+	{sfxVolume: 0},
 	{BannerID: 0},
 	{InterstitialID: 0}
 ];
@@ -4806,10 +4818,6 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpBehavior() / 2);
 		},
 		() => 9,
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => and("SCORE ", v0.GetValue());
-		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => Math.round(v0.GetValue());
@@ -5259,6 +5267,7 @@ self.C3_ExpressionFuncs = [
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => n0.ExpObject((f1("i") - 1), 1);
 		},
+		() => "bgm",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("LAST SCORE: ", v0.GetValue());
@@ -5266,7 +5275,8 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("HIGH SCORE: ", v0.GetValue());
-		}
+		},
+		() => "Settings"
 ];
 
 
