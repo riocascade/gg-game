@@ -3035,6 +3035,17 @@ e=>this._OnJobWorkerMessage(e)}catch(err){this._hadErrorCreatingWorker=true;this
 
 {
 self["C3_Shaders"] = {};
+self["C3_Shaders"]["brightness"] = {
+	glsl: "varying mediump vec2 vTex;\nuniform lowp sampler2D samplerFront;\nuniform lowp float brightness;\nvoid main(void)\n{\nlowp vec4 front = texture2D(samplerFront, vTex);\nlowp float a = front.a;\nif (a != 0.0)\nfront.rgb /= front.a;\nfront.rgb += (brightness - 1.0);\nfront.rgb *= a;\ngl_FragColor = front;\n}",
+	wgsl: "",
+	extendBoxHorizontal: 0,
+	extendBoxVertical: 0,
+	crossSampling: false,
+	mustPreDraw: false,
+	preservesOpaqueness: true,
+	animated: false,
+	parameters: [["brightness",0,"percent"]]
+};
 
 }
 
@@ -4297,6 +4308,39 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 }
 
 {
+'use strict';const C3=self.C3;C3.Behaviors.solid=class SolidBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.solid.Type=class SolidType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}};
+
+}
+
+{
+'use strict';const C3=self.C3;const ENABLE=0;const TAGS=1;const EMPTY_SET=new Set;
+C3.Behaviors.solid.Instance=class SolidInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this.SetEnabled(true);if(properties){this.SetEnabled(properties[ENABLE]);this.SetTags(properties[TAGS])}}Release(){super.Release()}SetEnabled(e){this._inst._SetSolidEnabled(!!e)}IsEnabled(){return this._inst._IsSolidEnabled()}SetTags(tagList){const savedDataMap=this._inst.GetSavedDataMap();if(!tagList.trim()){savedDataMap.delete("solidTags");return}let solidTags=savedDataMap.get("solidTags");
+if(!solidTags){solidTags=new Set;savedDataMap.set("solidTags",solidTags)}solidTags.clear();for(const tag of tagList.split(" "))if(tag)solidTags.add(tag.toLowerCase())}GetTags(){return this._inst.GetSavedDataMap().get("solidTags")||EMPTY_SET}SaveToJson(){return{"e":this.IsEnabled()}}LoadFromJson(o){this.SetEnabled(o["e"])}GetPropertyValueByIndex(index){switch(index){case ENABLE:return this.IsEnabled()}}SetPropertyValueByIndex(index,value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProperties(){return[{title:"$"+
+this.GetBehaviorType().GetName(),properties:[{name:"behaviors.solid.properties.enabled.name",value:this.IsEnabled(),onedit:v=>this.SetEnabled(v)}]}]}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.solid.Cnds={IsEnabled(){return this.IsEnabled()}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.solid.Acts={SetEnabled(e){this.SetEnabled(e)},SetTags(tagList){this.SetTags(tagList)}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.solid.Exps={};
+
+}
+
+{
 const C3 = self.C3;
 self.C3_GetObjectRefTable = function () {
 	return [
@@ -4322,26 +4366,13 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Mouse,
 		C3.Behaviors.Fade,
 		C3.Behaviors.Flash,
+		C3.Behaviors.solid,
 		C3.Plugins.System.Cnds.OnLoadFinished,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.System.Acts.GoToLayout,
-		C3.Plugins.System.Cnds.EveryTick,
-		C3.Plugins.Spritefont2.Acts.SetText,
-		C3.Plugins.System.Exps.loadingprogress,
-		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.Plugins.System.Acts.SetBoolVar,
-		C3.Plugins.Sprite.Acts.SetAnimFrame,
-		C3.Plugins.Sprite.Acts.SetVisible,
-		C3.Plugins.Sprite.Acts.Spawn,
-		C3.Plugins.Sprite.Exps.LayerName,
-		C3.Plugins.Arr.Acts.JSONLoad,
-		C3.Plugins.Dictionary.Exps.Get,
-		C3.Plugins.Arr.Exps.At,
 		C3.Behaviors.Pin.Acts.PinByProperties,
-		C3.Behaviors.Pin.Acts.Pin,
-		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.System.Cnds.Repeat,
 		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.System.Exps.random,
@@ -4351,6 +4382,20 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetScale,
 		C3.Behaviors.Bullet.Exps.Speed,
 		C3.Plugins.Sprite.Acts.SetOpacity,
+		C3.Plugins.System.Cnds.EveryTick,
+		C3.Plugins.Spritefont2.Acts.SetText,
+		C3.Plugins.System.Exps.loadingprogress,
+		C3.Plugins.System.Cnds.IsGroupActive,
+		C3.Plugins.System.Acts.SetBoolVar,
+		C3.Plugins.Sprite.Acts.SetAnimFrame,
+		C3.Plugins.Sprite.Acts.SetVisible,
+		C3.Plugins.Sprite.Acts.Spawn,
+		C3.Plugins.Sprite.Exps.LayerName,
+		C3.Plugins.Arr.Acts.JSONLoad,
+		C3.Plugins.Dictionary.Exps.Get,
+		C3.Plugins.Arr.Exps.At,
+		C3.Behaviors.Pin.Acts.Pin,
+		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.System.Cnds.Every,
@@ -4382,9 +4427,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SubInstanceVar,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Sprite.Exps.ObjectTypeName,
+		C3.Plugins.System.Cnds.Else,
+		C3.Plugins.Sprite.Acts.SetEffectParam,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Behaviors.scrollto.Acts.Shake,
-		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
 		C3.Behaviors.Flash.Cnds.IsFlashing,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
@@ -4423,6 +4469,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.LocalStorage.Acts.GetItem,
 		C3.Plugins.LocalStorage.Cnds.OnItemGet,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
+		C3.Plugins.Sprite.Acts.SetWidth,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.Plugins.Arr.Acts.SetSize,
 		C3.Plugins.Arr.Acts.Push,
@@ -4443,7 +4490,13 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.TextBox.Exps.Text,
 		C3.Plugins.Audio.Cnds.IsTagPlaying,
 		C3.Plugins.System.Acts.SetLayerVisible,
-		C3.Plugins.System.Cnds.LayerVisible
+		C3.Plugins.System.Cnds.LayerVisible,
+		C3.Plugins.System.Acts.SetTimescale,
+		C3.Plugins.Sprite.Acts.SetPosToObject,
+		C3.Plugins.Touch.Cnds.IsTouchingObject,
+		C3.Plugins.Sprite.Acts.SetX,
+		C3.Plugins.Sprite.Exps.Width,
+		C3.Plugins.Audio.Acts.SetVolume
 	];
 };
 self.C3_JsPropNameTable = [
@@ -4560,8 +4613,13 @@ self.C3_JsPropNameTable = [
 	{Settings: 0},
 	{BgmBar: 0},
 	{SfxBar: 0},
+	{Solid: 0},
 	{BgmSlider: 0},
 	{SfxSlider: 0},
+	{ShipLoading: 0},
+	{BgmSliderBlock: 0},
+	{SfxSliderBlock: 0},
+	{ExplosionSmall: 0},
 	{Enemies: 0},
 	{Patterns: 0},
 	{Bullets: 0},
@@ -4755,7 +4813,27 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
+		() => 2,
 		() => 1,
+		() => 30,
+		() => "Stars",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => f0(f1());
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(20, 200);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpBehavior() / 200);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpBehavior() / 2);
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (and("LOADING - ", Math.round((f0() * 100))) + "%");
@@ -4794,29 +4872,9 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject(3);
 		},
-		() => 30,
 		() => 50,
-		() => 2,
 		() => 70,
 		() => 45,
-		() => "Stars",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => f0(f1());
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(20, 200);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpBehavior() / 200);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpBehavior() / 2);
-		},
 		() => 9,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4843,40 +4901,41 @@ self.C3_ExpressionFuncs = [
 			return () => f0();
 		},
 		() => "Rocket",
-		() => -5,
+		() => "sfx",
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) - 5);
+			return () => (n0.ExpObject(1) - 30);
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) + 5);
+			return () => (n0.ExpObject(1) + 30);
 		},
 		() => 3,
+		() => 0.05,
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) - 9);
+			return () => (n0.ExpObject(1) - 20);
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) + 9);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) - 4);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) + 4);
+			return () => (n0.ExpObject(1) + 20);
 		},
 		() => 0.02,
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) - 12);
+			return () => (n0.ExpObject(1) - 40);
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) + 12);
+			return () => (n0.ExpObject() - 15);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject(1) + 40);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 15);
 		},
 		() => 5,
 		p => {
@@ -4898,14 +4957,6 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject(1) + 15);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) - 40);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject(1) + 40);
 		},
 		() => "rocket3",
 		() => 0.6,
@@ -4991,14 +5042,14 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (1 + f0());
 		},
-		() => -10,
-		() => -20,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpInstVar();
 		},
 		() => "Missile",
 		() => "SpreadLaser",
+		() => "Brightness",
+		() => 200,
 		() => 20,
 		() => 0.4,
 		() => 99999,
@@ -5207,6 +5258,8 @@ self.C3_ExpressionFuncs = [
 		() => "FONT-SIZE",
 		() => "40px",
 		() => 1.2,
+		() => "bgmVolume",
+		() => "sfxVolume",
 		() => "Rocket1",
 		() => "Rocket2",
 		() => "Rocket3",
@@ -5218,6 +5271,10 @@ self.C3_ExpressionFuncs = [
 		() => "Rocket9",
 		() => "spaceship",
 		() => "Storage",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => ((v0.GetValue() / 100) * 165);
+		},
 		() => "spaceship1",
 		() => "spaceship2",
 		() => "spaceship3",
@@ -5276,7 +5333,22 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("HIGH SCORE: ", v0.GetValue());
 		},
-		() => "Settings"
+		() => "Settings",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			const n3 = p._GetNode(3);
+			return () => C3.distanceTo(n0.ExpObject(), n1.ExpObject(), n2.ExpObject(), n3.ExpObject());
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => Math.round(((n0.ExpObject() / 165) * 100));
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (0 - (20 - (20 * (v0.GetValue() / 100))));
+		}
 ];
 
 
