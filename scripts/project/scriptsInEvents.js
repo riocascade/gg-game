@@ -128,8 +128,8 @@ const scriptsInEvents = {
 
 		async E_start_Event1_Act1(runtime, localVars)
 		{
-			const token = "eyJ0eXAiO"
-			const decoded = jwt(token);
+			const token = "eyJ0eXAiO";
+			const decoded = jwtDecode(token);
 			
 			console.log(decoded);
 		}
