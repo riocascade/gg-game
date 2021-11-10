@@ -4487,6 +4487,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text.Exps.Text,
 		C3.Plugins.Browser.Acts.Close,
 		C3.Plugins.TextBox.Exps.Text,
+		C3.ScriptsInEvents.E_start_Event1_Act1,
 		C3.Plugins.Audio.Cnds.IsTagPlaying,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.System.Cnds.LayerVisible,
